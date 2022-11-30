@@ -66,7 +66,7 @@ namespace PTTExtracts
 
             foreach (ScavExfiltrationPoint scavExfiltrationPoint in __instance.ScavExfiltrationPoints)
             {
-
+                Logger.LogWarning("Scav Exfil name = " + scavExfiltrationPoint.Settings.Name);
                 SharedExfiltrationPoint sharedExfiltrationPoint;
                 if ((sharedExfiltrationPoint = (scavExfiltrationPoint as SharedExfiltrationPoint)) != null && sharedExfiltrationPoint.IsMandatoryForScavs)
                 {
@@ -81,12 +81,10 @@ namespace PTTExtracts
             AccessTools.Field(typeof(GClass1016), "list_1").SetValue(__instance, list_1);
 
 
-            Logger.LogInfo("Looped Scav Exfils");
-
             UnityEngine.Random.InitState(GClass1160.Now.Millisecond);
             foreach (ExfiltrationPoint exfiltrationPoint in __instance.ExfiltrationPoints)
             {
-                Logger.LogWarning("Exfil name = " + exfiltrationPoint.Settings.Name);
+                Logger.LogWarning("PMC Exfil name = " + exfiltrationPoint.Settings.Name);
                 exitName = exfiltrationPoint.Settings.Name;
                 GClass1131 gclass = settings.FirstOrDefault(new Func<GClass1131, bool>(NameMatches));
                 if (gclass != null)
@@ -102,8 +100,6 @@ namespace PTTExtracts
                     exfiltrationPoint.SetStatusLogged(EExfiltrationStatus.NotPresent, "ExfiltrationController.InitAllExfiltrationPoints-3");
                 }
             }
-
-            Logger.LogInfo("Looped PMC Exfils");
 
             return false;
         }
