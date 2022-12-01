@@ -38,8 +38,8 @@ namespace PTTExtracts
             ExfiltrationPoint[] source = LocationScene.GetAllObjects<ExfiltrationPoint>(false).ToArray<ExfiltrationPoint>();
 
 
-            ExfiltrationPoint[] scavExfilArr = source.Where(new Func<ExfiltrationPoint, bool>(IsScavExfil)).Cast<ExfiltrationPoint>().ToArray<ExfiltrationPoint>();
-            ExfiltrationPoint[] pmcExfilArr = source.Where(new Func<ExfiltrationPoint, bool>(IsNotScavExfil)).Cast<ExfiltrationPoint>().ToArray<ExfiltrationPoint>();
+            ExfiltrationPoint[] scavExfilArr = source.Where(new Func<ExfiltrationPoint, bool>(IsScavExfil)).ToArray<ExfiltrationPoint>();
+            ExfiltrationPoint[] pmcExfilArr = source.Where(new Func<ExfiltrationPoint, bool>(IsNotScavExfil)).ToArray<ExfiltrationPoint>();
 
             List<ExfiltrationPoint> pmcExfilList = pmcExfilArr.ToList<ExfiltrationPoint>();
 
@@ -51,7 +51,6 @@ namespace PTTExtracts
                 }
             }
 
-          
             AccessTools.Property(typeof(GClass1016), "ExfiltrationPoints").SetValue(__instance, pmcExfilList.ToArray());
 
             AccessTools.Property(typeof(GClass1016), "ScavExfiltrationPoints").SetValue(__instance, source.Where(new Func<ExfiltrationPoint, bool>(IsScavExfil)).Cast<ScavExfiltrationPoint>().ToArray<ScavExfiltrationPoint>());
