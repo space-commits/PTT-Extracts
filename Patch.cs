@@ -33,7 +33,7 @@ namespace PTTExtracts
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(ref GClass1016 __instance, GClass1131[] settings, bool justLoadSettings = false, string disabledScavExits = "", bool giveAuthority = true)
+        private static bool PatchPrefix(ref GClass1016 __instance, GClass1131[] settings, bool justLoadSettings = false, bool giveAuthority = true)
         {
             ExfiltrationPoint[] source = LocationScene.GetAllObjects<ExfiltrationPoint>(false).ToArray<ExfiltrationPoint>();
 
@@ -120,7 +120,6 @@ namespace PTTExtracts
             return !(x is ScavExfiltrationPoint) || x is SharedExfiltrationPoint;
         }
 
-        // Token: 0x06004B74 RID: 19316 RVA: 0x000CF637 File Offset: 0x000CD837
         public static bool IsScavExfil(ExfiltrationPoint x)
         {
             return x is ScavExfiltrationPoint;
