@@ -27,7 +27,7 @@ namespace PTTExtracts
 
     public class InitAllExfiltrationPointsPatch : ModulePatch
     {
-        public static bool NameMatches(GClass1193 x)
+        public static bool NameMatches(GClass1195 x)
         {
             return exitName == x.Name;
         }
@@ -55,7 +55,7 @@ namespace PTTExtracts
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(ref ExfiltrationControllerClass __instance, GClass1193[] settings, bool justLoadSettings = false, bool giveAuthority = true)
+        private static bool PatchPrefix(ref ExfiltrationControllerClass __instance, GClass1195[] settings, bool justLoadSettings = false, bool giveAuthority = true)
         {
             ExfiltrationPoint[] source = LocationScene.GetAllObjects<ExfiltrationPoint>(false).ToArray<ExfiltrationPoint>();
             ExfiltrationPoint[] scavExfilArr = source.Where(new Func<ExfiltrationPoint, bool>(IsScavExfil)).ToArray<ExfiltrationPoint>();
@@ -84,6 +84,7 @@ namespace PTTExtracts
             foreach (ScavExfiltrationPoint scavExfiltrationPoint in __instance.ScavExfiltrationPoints)
             {
                 Logger.LogWarning("Scav Exfil name = " + scavExfiltrationPoint.Settings.Name);
+
                 SharedExfiltrationPoint sharedExfiltrationPoint;
                 if ((sharedExfiltrationPoint = (scavExfiltrationPoint as SharedExfiltrationPoint)) != null && sharedExfiltrationPoint.IsMandatoryForScavs)
                 {
@@ -98,12 +99,12 @@ namespace PTTExtracts
             AccessTools.Field(typeof(ExfiltrationControllerClass), "list_1").SetValue(__instance, list_1);
 
 
-            UnityEngine.Random.InitState(GClass1247.Now.Millisecond);
+            UnityEngine.Random.InitState(GClass1249.Now.Millisecond);
             foreach (ExfiltrationPoint exfiltrationPoint in __instance.ExfiltrationPoints)
             {
                 Logger.LogWarning("PMC Exfil name = " + exfiltrationPoint.Settings.Name);
                 exitName = exfiltrationPoint.Settings.Name;
-                GClass1193 gclass = settings.FirstOrDefault(new Func<GClass1193, bool>(NameMatches));
+                GClass1195 gclass = settings.FirstOrDefault(new Func<GClass1195, bool>(NameMatches));
                 if (gclass != null)
                 {
                     exfiltrationPoint.LoadSettings(gclass, giveAuthority);
