@@ -27,7 +27,7 @@ namespace PTTExtracts
 
     public class InitAllExfiltrationPointsPatch : ModulePatch
     {
-        public static bool NameMatches(GClass1195 x)
+        public static bool NameMatches(GClass1198 x)
         {
             return exitName == x.Name;
         }
@@ -55,7 +55,7 @@ namespace PTTExtracts
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(ref ExfiltrationControllerClass __instance, GClass1195[] settings, bool justLoadSettings = false, bool giveAuthority = true)
+        private static bool PatchPrefix(ref ExfiltrationControllerClass __instance, GClass1198[] settings, bool justLoadSettings = false, bool giveAuthority = true)
         {
             ExfiltrationPoint[] source = LocationScene.GetAllObjects<ExfiltrationPoint>(false).ToArray<ExfiltrationPoint>();
             ExfiltrationPoint[] scavExfilArr = source.Where(new Func<ExfiltrationPoint, bool>(IsScavExfil)).ToArray<ExfiltrationPoint>();
@@ -99,12 +99,12 @@ namespace PTTExtracts
             AccessTools.Field(typeof(ExfiltrationControllerClass), "list_1").SetValue(__instance, list_1);
 
 
-            UnityEngine.Random.InitState(GClass1249.Now.Millisecond);
+            UnityEngine.Random.InitState(GClass1252.Now.Millisecond);
             foreach (ExfiltrationPoint exfiltrationPoint in __instance.ExfiltrationPoints)
             {
                 Logger.LogWarning("PMC Exfil name = " + exfiltrationPoint.Settings.Name);
                 exitName = exfiltrationPoint.Settings.Name;
-                GClass1195 gclass = settings.FirstOrDefault(new Func<GClass1195, bool>(NameMatches));
+                GClass1198 gclass = settings.FirstOrDefault(new Func<GClass1198, bool>(NameMatches));
                 if (gclass != null)
                 {
                     exfiltrationPoint.LoadSettings(gclass, giveAuthority);
