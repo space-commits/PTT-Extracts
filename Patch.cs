@@ -7,6 +7,10 @@ using EFT.Interactive;
 using EFT.InventoryLogic;
 using HarmonyLib;
 
+using TimeClass = GClass1292;
+using ExfilTemplate = GClass1235;
+
+
 namespace PTTExtracts
 {
     public class ScavExfiltrationPointPatch : ModulePatch
@@ -27,7 +31,7 @@ namespace PTTExtracts
 
     public class InitAllExfiltrationPointsPatch : ModulePatch
     {
-        public static bool NameMatches(GClass1197 x)
+        public static bool NameMatches(ExfilTemplate x)
         {
             return exitName == x.Name;
         }
@@ -55,7 +59,7 @@ namespace PTTExtracts
         }
 
         [PatchPrefix]
-        private static bool PatchPrefix(ref ExfiltrationControllerClass __instance, GClass1197[] settings, bool justLoadSettings = false, bool giveAuthority = true)
+        private static bool PatchPrefix(ref ExfiltrationControllerClass __instance, ExfilTemplate[] settings, bool justLoadSettings = false, bool giveAuthority = true)
         {
             ExfiltrationPoint[] source = LocationScene.GetAllObjects<ExfiltrationPoint>(false).ToArray<ExfiltrationPoint>();
             ExfiltrationPoint[] scavExfilArr = source.Where(new Func<ExfiltrationPoint, bool>(IsScavExfil)).ToArray<ExfiltrationPoint>();
@@ -72,9 +76,7 @@ namespace PTTExtracts
             }
 
             AccessTools.Property(typeof(ExfiltrationControllerClass), "ExfiltrationPoints").SetValue(__instance, pmcExfilList.ToArray());
-
             AccessTools.Property(typeof(ExfiltrationControllerClass), "ScavExfiltrationPoints").SetValue(__instance, source.Where(new Func<ExfiltrationPoint, bool>(IsScavExfil)).Cast<ScavExfiltrationPoint>().ToArray<ScavExfiltrationPoint>());
-
             AccessTools.Field(typeof(ExfiltrationControllerClass), "list_0").SetValue(__instance, new List<ScavExfiltrationPoint>(__instance.ScavExfiltrationPoints.Length));
             AccessTools.Field(typeof(ExfiltrationControllerClass), "list_1").SetValue(__instance, new List<ScavExfiltrationPoint>());
 
@@ -83,8 +85,6 @@ namespace PTTExtracts
 
             foreach (ScavExfiltrationPoint scavExfiltrationPoint in __instance.ScavExfiltrationPoints)
             {
-                Logger.LogWarning("Scav Exfil name = " + scavExfiltrationPoint.Settings.Name);
-
                 SharedExfiltrationPoint sharedExfiltrationPoint;
                 if ((sharedExfiltrationPoint = (scavExfiltrationPoint as SharedExfiltrationPoint)) != null && sharedExfiltrationPoint.IsMandatoryForScavs)
                 {
@@ -98,16 +98,14 @@ namespace PTTExtracts
             AccessTools.Field(typeof(ExfiltrationControllerClass), "list_0").SetValue(__instance, list_0);
             AccessTools.Field(typeof(ExfiltrationControllerClass), "list_1").SetValue(__instance, list_1);
 
-
-            UnityEngine.Random.InitState(GClass1251.Now.Millisecond);
+            UnityEngine.Random.InitState(TimeClass.Now.Millisecond);
             foreach (ExfiltrationPoint exfiltrationPoint in __instance.ExfiltrationPoints)
             {
-                Logger.LogWarning("PMC Exfil name = " + exfiltrationPoint.Settings.Name);
                 exitName = exfiltrationPoint.Settings.Name;
-                GClass1197 gclass = settings.FirstOrDefault(new Func<GClass1197, bool>(NameMatches));
-                if (gclass != null)
+                ExfilTemplate exfilTemplate = settings.FirstOrDefault(new Func<ExfilTemplate, bool>(NameMatches));
+                if (exfilTemplate != null)
                 {
-                    exfiltrationPoint.LoadSettings(gclass, giveAuthority);
+                    exfiltrationPoint.LoadSettings(exfilTemplate, giveAuthority);
                     if (!justLoadSettings && !RandomRange(exfiltrationPoint))
                     {
                         exfiltrationPoint.SetStatusLogged(EExfiltrationStatus.NotPresent, "ExfiltrationController.InitAllExfiltrationPoints-2");
